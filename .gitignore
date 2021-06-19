@@ -1,0 +1,8 @@
+DATASET
+evaluations
+logs
+logs_tensor_board
+paper_weights
+preds
+weights
+__pycache__
