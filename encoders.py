@@ -865,6 +865,7 @@ def get_mobilenetv2_encoder(input_height=224, input_width=224, depth=3, filter_s
     return img_input, [f1, f2, f3, f4, f5 ]
 
 def get_densenet121_encoder(input_height=224, input_width=224, depth=3, filter_size = 64, pretrained='imagenet', encoder_name='DenseNet121'):
+    global weights_path
     assert (K.image_data_format() == 'channels_last'), "Currently only channels last mode is supported"
     assert (IMAGE_ORDERING == 'channels_last'), "Currently only channels last mode is supported"
 

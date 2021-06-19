@@ -19,6 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+from random import random
 
 from config import *
 import imgaug as ia
@@ -164,7 +165,7 @@ def image_segmentation_generator(images_path, segs_path,  batch_size,  classes, 
     img_seg_pairs = get_pairs_from_paths(images_path, segs_path)
     
     if shuffle: random.shuffle(img_seg_pairs)
-    zipped = itertools.cycle(img_seg_pairs)
+    zipped = iaa.itertools.cycle(img_seg_pairs)
     while True:
         X = []
         Y = []
