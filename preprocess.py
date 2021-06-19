@@ -22,12 +22,15 @@
 #
 # The following code is based on the following module:
 # https://github.com/ellisdg/3DUnetCNN/blob/master/brats/preprocess.py under MIT License
+import warnings
+
+from nipype.interfaces.ants import N4BiasFieldCorrection
 
 from config import *
 
 import shutil
 import SimpleITK as sitk
-from nipype.interfaces.ants import N4BiasFieldCorrection
+
 
 config["modalities"] = ["flair", "t1", "t1ce", "t2"]
 
