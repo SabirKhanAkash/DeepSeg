@@ -33,18 +33,23 @@ from tqdm import tqdm
 
 from sklearn.preprocessing import LabelBinarizer
 
-image_modality = 'image_FLAIR'
+image_modality = 'image_flair'
 
 # Training
 IMG_ROOT = config['preprocessed_brats']+config['train_modality']
 IMG_OUTPUT_ROOT = config['preprocessed_brats_imgs']+config['train_modality']
+print("IMG ROOT: ",IMG_ROOT)
+print("IMG OUTPUT ROOT: ",IMG_OUTPUT_ROOT)
+
 
 # Validation
 #IMG_ROOT = config['preprocessed_brats_val']+config['train_modality']
 #IMG_OUTPUT_ROOT = config['preprocessed_brats_val_imgs']+config['train_modality']
 
-LABEL_ROOT = config['preprocessed_brats']+'truth'
+LABEL_ROOT = config['preprocessed_brats']+'truth/'
 LABEL_OUTPUT_ROOT = config['preprocessed_brats']+config['label_type']
+print("LABEL ROOT: ",LABEL_ROOT)
+print("LABEL OUTPUT ROOT: ",LABEL_OUTPUT_ROOT)
 
 
 L0 = 0		# Background
@@ -91,10 +96,12 @@ def nii2jpg_label(img_path, output_root):
     output_path = os.path.join(output_root, img_name)
 
     try:
+        # print("I'm here at line 99")
         os.mkdir(output_root)
     except:
         pass
     try:
+        # print("I'm here at line 104")
         os.mkdir(output_path)
     except:
         pass
@@ -102,47 +109,56 @@ def nii2jpg_label(img_path, output_root):
     img = (img.get_fdata())[:,:,:]
 
     img = img.astype(np.uint8)
+    print(config['label_type'])
 
 
-    if(config['label_type'] == "complete"):
+    if(config['label_type'] == "_complete/"):
         # Complete tumor label (8) = label 1 + 2 + 4
+        print("I'm here at line 116")
         img[img > 0] = L_com
-    elif(config['label_type'] == "core"):
+    elif(config['label_type'] == "_core/"):
+        print("I'm here at line 120")
         img[img == L1] = L_cor
         img[img == L2] = L0	# Background
         img[img == L3] = L_cor
-    elif(config['label_type'] == "enhancing"):
+    elif(config['label_type'] == "_enhancing/"):
+        print("I'm here at line 125")
         img[img == L1] = L0	# Background
         img[img == L2] = L0	# Background
         img[img == L3] = L_enh
-    elif(config['label_type'] == "l1"):
+    elif(config['label_type'] == "_l1/"):
+        print("I'm here at line 130")
         #img[img == L1] = L1
         img[img == L2] = L0
         img[img == L3] = L0
-    elif(config['label_type'] == "l2"):
+    elif(config['label_type'] == "_l2/"):
+        print("I'm here at line 135")
         img[img == L1] = L0
         #img[img == L2] = L2
         img[img == L3] = L0
-    elif(config['label_type'] == "l3"):
+    elif(config['label_type'] == "_l3/"):
+        print("I'm here at line 140")
         img[img == L1] = L0
         img[img == L2] = L0
         #img[img == L3] = L3
 
     for i in range(img.shape[2]):
         filename = os.path.join(output_path, img_name+'_'+str(i)+'.png')
+
         gray_img = img[:,:,i]
 
         cv2.imwrite(filename, gray_img)
 
-for path in tqdm(os.listdir(IMG_ROOT)):
-    #print(path)
-    if path[0] == '.':
-        continue
-    nii2jpg_img(os.path.join(IMG_ROOT,path), IMG_OUTPUT_ROOT)
-"""
+
+# for path in tqdm(os.listdir(IMG_ROOT)):
+#     #print(path)
+#     if path[0] == '.':
+#         continue
+#     nii2jpg_img(os.path.join(IMG_ROOT,path), IMG_OUTPUT_ROOT)
+
 for path in tqdm(os.listdir(LABEL_ROOT)):
     #print(path)
     if path[0] == '.':
         continue
     nii2jpg_label(os.path.join(LABEL_ROOT,path), LABEL_OUTPUT_ROOT)
-"""
+
