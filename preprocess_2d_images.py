@@ -150,15 +150,15 @@ def nii2jpg_label(img_path, output_root):
         cv2.imwrite(filename, gray_img)
 
 
-# for path in tqdm(os.listdir(IMG_ROOT)):
-#     #print(path)
-#     if path[0] == '.':
-#         continue
-#     nii2jpg_img(os.path.join(IMG_ROOT,path), IMG_OUTPUT_ROOT)
-
-for path in tqdm(os.listdir(LABEL_ROOT)):
+for path in tqdm(os.listdir(IMG_ROOT)):
     #print(path)
     if path[0] == '.':
         continue
-    nii2jpg_label(os.path.join(LABEL_ROOT,path), LABEL_OUTPUT_ROOT)
+    nii2jpg_img(os.path.join(IMG_ROOT,path), IMG_OUTPUT_ROOT)
+
+# for path in tqdm(os.listdir(LABEL_ROOT)):
+#     #print(path)
+#     if path[0] == '.':
+#         continue
+#     nii2jpg_label(os.path.join(LABEL_ROOT,path), LABEL_OUTPUT_ROOT)
 

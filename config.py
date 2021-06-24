@@ -53,7 +53,7 @@ config['project_name'] = config['encoder_name'] + '_' + config['decoder_name']
 config['all_modalities'] = ["image_FLAIR/", "image_t1/", "image_t1ce/", "image_t2/"]
 config['train_modality'] = "truth/"
 config['n_modalities'] = len(config['train_modality'])
-config['label_type'] = '_l3/' # _complete, _core, _enhancing, _l1, _l2, _l3
+config['label_type'] = '_complete/' # _complete, _core, _enhancing, _l1, _l2, _l3
 config['train_label'] = 'truth' + config['label_type']
 
 config['classes'] = [0,1] # 0 for the background, 1 for the tumor
@@ -166,7 +166,7 @@ print("####################################################################\n\n"
 
 # limit the GPU usage
 import tensorflow as tf
-from keras.backend.tensorflow_backend import set_session
+# from keras.backend.tensorflow_backend import set_session
 #
 gpu_id = 0 # for multi-gpu environment
 os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
