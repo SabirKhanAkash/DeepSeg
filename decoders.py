@@ -3,6 +3,7 @@ from keras.layers import *
 from keras.models import *
 
 def get_decoder_model(input, output):
+    global output_width, output_height, n_classes, input_height, input_width
     img_input = input
     o = output
     o_shape = Model(img_input, o).output_shape

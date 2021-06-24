@@ -188,6 +188,7 @@ def _adjust_block(p, ip, filters, block_id=None):
     # Returns
         Adjusted Keras tensor
     '''
+    global p_shape
     channel_dim = 1 if K.image_data_format() == 'channels_first' else -1
     img_dim = 2 if K.image_data_format() == 'channels_first' else -2
 
@@ -527,6 +528,7 @@ def get_vgg16_encoder(input_height=224, input_width=224, depth=3, filter_size = 
     return img_input, [f1, f2, f3, f4, f5]
 
 def get_resnet50_encoder(input_height=224, input_width=224, depth=3, filter_size = 64, pretrained='imagenet', encoder_name='ResNet50'):
+    global pretrained_url, img_input, bn_axis
     assert input_height%32 == 0
     assert input_width%32 == 0
 
@@ -622,6 +624,7 @@ def get_mobilenet_encoder(input_height=224, input_width=224, depth=3, filter_siz
     return img_input, [f1, f2, f3, f4, f5 ]
 
 def get_xception_encoder(input_height=224, input_width=224, depth=3, filter_size = 64, pretrained='imagenet', encoder_name='Xception'):
+    global img_input, channel_axis, pretrained_url
     if IMAGE_ORDERING == 'channels_first':
         channel_axis = 1
         img_input = Input(shape=(depth, input_height, input_width))
@@ -729,6 +732,7 @@ def get_xception_encoder(input_height=224, input_width=224, depth=3, filter_size
 
 def get_nasnet_encoder(input_height=224, input_width=224, depth=3, filter_size = 64, pretrained='imagenet', encoder_name='NASNetMobile'):
     # NASNetMobile = 224, NASNetLarge = 331, NOTE: Only "channels_last" is supported
+    global penultimate_filters, stem_block_filters, filter_multiplier, num_blocks, skip_reduction, weights_path
     if encoder_name=='NASNetMobile':
         penultimate_filters=1056
         num_blocks=4
