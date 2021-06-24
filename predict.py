@@ -111,7 +111,7 @@ def main(sample_output=False, predict_val=True, predict_val_nifti=False):
     if predict_val_nifti:
         f=open(config['val_cases_file'], "r")
         valid_ids =f.read()
-        f.close
+        f.close()
 
         valid_dirs = valid_ids.split("\n")
         del valid_dirs[-1]

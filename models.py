@@ -28,6 +28,7 @@ from decoders import *
 
 # UNet based models
 def get_deepseg_encoder(encoder_name):
+    global encoder
     if encoder_name == 'UNet':
             encoder = get_unet_encoder
     elif encoder_name == 'VGG16':
@@ -54,6 +55,7 @@ def get_deepseg_encoder(encoder_name):
     return encoder
 
 def get_deepseg_decoder(decoder_name, n_classes, encoder, input_height, input_width, depth, filter_size, encoder_name=None, up_layer=False, trainable=True):
+    global decoder
     if decoder_name == 'UNet':
         decoder = get_unet_decoder(n_classes, encoder, input_height, input_width, depth, filter_size, encoder_name, up_layer, trainable)
     elif decoder_name == 'UNet-Mod':
