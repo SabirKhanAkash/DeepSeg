@@ -28,7 +28,6 @@ import six
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from cv2 import imread, imwrite, resize, INTER_NEAREST
-from keras import backend as K
 import nibabel as nib
 
 K.set_image_data_format('channels_last')

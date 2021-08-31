@@ -1,6 +1,6 @@
 from config import *
-from keras.layers import *
-from keras.models import *
+from tensorflow.python.keras.layers import *
+from tensorflow.python.keras.models import *
 
 def get_decoder_model(input, output):
     global output_width, output_height, n_classes, input_height, input_width

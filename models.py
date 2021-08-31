@@ -66,7 +66,7 @@ def get_deepseg_decoder(decoder_name, n_classes, encoder, input_height, input_wi
             print("UNet, UNet-Mod")
     return decoder
 
-def get_deepseg_model(encoder_name, decoder_name, n_classes, input_height, input_width, depth, filter_size, up_layer=False, trainable=True, load_model=False):
+def get_deepseg_model(encoder_name, decoder_name, n_classes, input_height, input_width, depth, filter_size, up_layer=False, trainable=True, load_model=True):
     encoder = get_deepseg_encoder(encoder_name)
     model = get_deepseg_decoder(decoder_name, n_classes, encoder, input_height, input_width, depth, filter_size, encoder_name, up_layer, trainable)
 

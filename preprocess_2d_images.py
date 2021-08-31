@@ -38,18 +38,20 @@ image_modality = 'image_flair'
 # Training
 IMG_ROOT = config['preprocessed_brats']+config['train_modality']
 IMG_OUTPUT_ROOT = config['preprocessed_brats_imgs']+config['train_modality']
-print("IMG ROOT: ",IMG_ROOT)
-print("IMG OUTPUT ROOT: ",IMG_OUTPUT_ROOT)
+
 
 
 # Validation
-#IMG_ROOT = config['preprocessed_brats_val']+config['train_modality']
-#IMG_OUTPUT_ROOT = config['preprocessed_brats_val_imgs']+config['train_modality']
+# IMG_ROOT = config['preprocessed_brats_val']+config['train_modality']
+# IMG_OUTPUT_ROOT = config['preprocessed_brats_val_imgs']+config['train_modality']
 
-LABEL_ROOT = config['preprocessed_brats']+'truth/'
-LABEL_OUTPUT_ROOT = config['preprocessed_brats']+config['label_type']
-print("LABEL ROOT: ",LABEL_ROOT)
-print("LABEL OUTPUT ROOT: ",LABEL_OUTPUT_ROOT)
+print("IMG ROOT: ",IMG_ROOT)
+print("IMG OUTPUT ROOT: ",IMG_OUTPUT_ROOT)
+
+# LABEL_ROOT = config['preprocessed_brats']+'truth/'
+# LABEL_OUTPUT_ROOT = config['preprocessed_brats']+config['label_type']
+# print("LABEL ROOT: ",LABEL_ROOT)
+# print("LABEL OUTPUT ROOT: ",LABEL_OUTPUT_ROOT)
 
 
 L0 = 0		# Background

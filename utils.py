@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from config import *
-from keras import backend as K
+
 import numpy as np
 #import scipy.spatial
 from scipy.spatial.distance import directed_hausdorff

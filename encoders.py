@@ -22,11 +22,11 @@
 
 from config import *
 from keras_applications import correct_pad
-from keras.layers import *
-from keras.models import *
-from keras.optimizers import Adam
-from keras.utils import get_file
-from keras import backend as K
+from tensorflow.python.keras.layers import *
+from tensorflow.python.keras.models import *
+
+from tensorflow.python.keras.utils.data_utils import get_file
+
 
 K.set_image_data_format('channels_last')
 if K.image_data_format() == 'channels_first':

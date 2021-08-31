@@ -152,6 +152,7 @@ def get_segmentation_arr(path, classes, width, height):
 
 def verify_segmentation_dataset(images_path, segs_path, n_classes):
     img_seg_pairs = get_pairs_from_paths(images_path, segs_path)
+    print(img_seg_pairs)
     assert len(img_seg_pairs)>0, "Dataset looks empty or path is wrong "
     
     for im_fn, seg_fn in tqdm(img_seg_pairs) :

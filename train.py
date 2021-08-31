@@ -24,7 +24,7 @@ from config import *
 from data import *
 from utils import *
 from models import *
-from keras.callbacks import ModelCheckpoint, CSVLogger, EarlyStopping, TensorBoard
+from tensorflow.python.keras.callbacks import ModelCheckpoint, CSVLogger, EarlyStopping, TensorBoard
 
 def train_deepseg_model(model, train_images, train_annotations, input_height=224, 
         input_width=224, output_height=224, output_width=224, classes=None, n_classes=None, 

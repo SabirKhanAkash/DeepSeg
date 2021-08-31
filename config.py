@@ -25,9 +25,10 @@ import os
 import itertools
 import random
 
+
 import numpy as np
-from keras import backend as K
-from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
+from tensorflow.python.keras import backend as K
 
 K.set_image_data_format('channels_last')
 if K.image_data_format() == 'channels_first':
@@ -39,9 +40,11 @@ config = dict()
 
 ####### These variables should be modified to your local path #######
 # dataset paths
-config['brats_path'] = 'DATASET/MICCAI_BraTS_2019_Data_Training/' # path to the original BraTS 2019
+config['brats_path'] = 'DATASET/MICCAI_BraTS_2019_Data_Validation/' # path to the original BraTS 2019
 config['preprocessed_brats'] = 'DATASET/BraTS19_train_preprocessed/' # path to the output preprocessed BraTS 2019 (after preprocess.py)
+config['preprocessed_brats_val'] = 'DATASET/BraTS19_train_preprocessed_val/'
 config['preprocessed_brats_imgs'] = 'DATASET/BraTS19_train_images/' # path to the output preprocessed 2D images (after preprocess_2d_images.py)
+config['preprocessed_brats_val_imgs'] = 'DATASET/BraTS19_train_images_val/'
 config['dataset_path'] = 'DATASET/dataset_brats19/' # path to the dataset containing 2d images (train_images, train_segmentation, ... etc)
 #####################################################################
 
@@ -51,9 +54,9 @@ config['decoder_name'] = 'UNet-Mod' # name of the decoder: UNet, UNet-Mod
 config['project_name'] = config['encoder_name'] + '_' + config['decoder_name']
 
 config['all_modalities'] = ["image_FLAIR/", "image_t1/", "image_t1ce/", "image_t2/"]
-config['train_modality'] = "truth/"
+config['train_modality'] = ["image_FLAIR/"]
 config['n_modalities'] = len(config['train_modality'])
-config['label_type'] = '_complete/' # _complete, _core, _enhancing, _l1, _l2, _l3
+config['label_type'] = '' # _complete, _core, _enhancing, _l1, _l2, _l3
 config['train_label'] = 'truth' + config['label_type']
 
 config['classes'] = [0,1] # 0 for the background, 1 for the tumor
@@ -166,14 +169,14 @@ print("####################################################################\n\n"
 
 # limit the GPU usage
 import tensorflow as tf
-# from keras.backend.tensorflow_backend import set_session
+#
 #
 gpu_id = 0 # for multi-gpu environment
 os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
 gpu_config = tf.compat.v1.ConfigProto(log_device_placement=True)
 gpu_config.gpu_options.allow_growth = True
-# s = set_session(tf.compat.v1.Session(config=gpu_config))
-# print(tf.test.gpu_device_name())
-#
-#
-# print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+K.set_session(tf.compat.v1.Session())
+print(tf.test.gpu_device_name())
+
+
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
