@@ -25,6 +25,9 @@ from config import *
 import imgaug as ia
 import imgaug.augmenters as iaa
 from tqdm import tqdm
+from tqdm.notebook import tqdm_notebook
+import numpy as np
+import cv2
 from cv2 import imread, resize, INTER_NEAREST
 
 seq = iaa.Sequential([
@@ -64,14 +67,14 @@ def get_images_arr(path, width, height, imgNorm="norm", odering='channels_first'
 
     for i in range(len(train_modalities)):
         im = os.path.join(train_dir, train_modalities[i]+ img_name)
-        im = imread(im, 0) # load as a grayscale image
-        im = resize(im, (width, height), interpolation = INTER_NEAREST)
+        im = cv2.imread(im, 0) # load as a grayscale image
+        im = cv2.resize(im, (width, height), interpolation = INTER_NEAREST)
         imgs[:,:,i] = im
 
     if imgNorm == "sub_and_divide":
         imgs = np.float32(resize(imgs, (width, height), interpolation = INTER_NEAREST)) / 127.5 - 1
     elif imgNorm == "divide":
-        imgs = resize(imgs, (width, height), interpolation = INTER_NEAREST)
+        imgs = cv2.resize(imgs, (width, height), interpolation = INTER_NEAREST)
         imgs = imgs.astype(np.float32)
         imgs = imgs/255.0
     elif imgNorm == "norm":
@@ -96,7 +99,7 @@ def get_image_arr(path, width, height, imgNorm="norm", odering='channels_first')
         img = path
     else:
         # Read grayscale image as (width, height, 3)
-        img = imread(path, 1)
+        img = cv2.imread(path, 1)
         # Read grayscale image as (width, height, 1)
         # img = imread(path, 0)
         # img = np.reshape(width, height, 1)
@@ -104,19 +107,19 @@ def get_image_arr(path, width, height, imgNorm="norm", odering='channels_first')
     if imgNorm == "sub_and_divide":
         img = np.float32(resize(img, (width, height), interpolation = INTER_NEAREST)) / 127.5 - 1
     elif imgNorm == "sub_mean":
-        img = resize(img, (width, height))
+        img = cv2.resize(img, (width, height))
         img = img.astype(np.float32)
         img[:,:,0] -= 103.939
         img[:,:,1] -= 116.779
         img[:,:,2] -= 123.68
         img = img[ :, :, ::-1 ]
     elif imgNorm == "divide":
-        img = resize(img, (width, height), interpolation = INTER_NEAREST)
+        img = cv2.resize(img, (width, height), interpolation = INTER_NEAREST)
         img = img.astype(np.float32)
         img = img/255.0
     elif imgNorm == "norm":
         # Intensity normalization (zero mean and unit variance)
-        img = resize(img, (width, height), interpolation = INTER_NEAREST)
+        img = cv2.resize(img, (width, height), interpolation = INTER_NEAREST)
         img_mean = img.mean()
         img_std = img.std()
         # img = (img - img_mean) / img_std
@@ -137,9 +140,9 @@ def get_segmentation_arr(path, classes, width, height):
     if type(path) is np.ndarray:
         img = path
     else:
-        img = imread(path, 1)
+        img = cv2.imread(path, 1)
 
-    img = resize(img, (width, height), interpolation=INTER_NEAREST)
+    img = cv2.resize(img, (width, height), interpolation=INTER_NEAREST)
     img = img[:, :, 0]
 
     # change the predicted label 4 to value of 3 (for the data augmentation)
@@ -151,14 +154,15 @@ def get_segmentation_arr(path, classes, width, height):
     return seg_labels
 
 def verify_segmentation_dataset(images_path, segs_path, n_classes):
+    # print("Image Path: ",images_path)
     img_seg_pairs = get_pairs_from_paths(images_path, segs_path)
-    print(img_seg_pairs)
+    # print(img_seg_pairs)
     assert len(img_seg_pairs)>0, "Dataset looks empty or path is wrong "
     
-    for im_fn, seg_fn in tqdm(img_seg_pairs) :
-        img = imread(im_fn)
-        seg = imread(seg_fn)
-        assert (img.shape[0]==seg.shape[0] and img.shape[1]==seg.shape[1]), "The size of image and the annotation does not match or they are corrupt "+ im_fn + " " + seg_fn
+    for (im_fn, seg_fn) in tqdm(img_seg_pairs):
+        img = cv2.imread(im_fn)
+        seg = cv2.imread(seg_fn)
+        # assert(img.shape[0]==seg.shape[0] and img.shape[1]==seg.shape[1]), "The size of image and the annotation does not match or they are corrupt "+ im_fn + " " + seg_fn
     print("Dataset verified! ")
 
 def image_segmentation_generator(images_path, segs_path,  batch_size,  classes, input_height, input_width, output_height, output_width, do_augment=False, shuffle=True):
@@ -172,7 +176,7 @@ def image_segmentation_generator(images_path, segs_path,  batch_size,  classes, 
         Y = []
         for _ in range(batch_size) :
             im, seg = next(zipped) 
-            seg = imread(seg, 1)
+            seg = cv2.imread(seg, 1)
 
             n_train_modality = len(config['train_modality'])
             if(n_train_modality<2):

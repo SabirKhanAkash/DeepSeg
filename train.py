@@ -26,11 +26,11 @@ from utils import *
 from models import *
 from tensorflow.python.keras.callbacks import ModelCheckpoint, CSVLogger, EarlyStopping, TensorBoard
 
-def train_deepseg_model(model, train_images, train_annotations, input_height=224, 
+def train_deepseg_model(model, train_images, train_annotations, input_height=224,
         input_width=224, output_height=224, output_width=224, classes=None, n_classes=None, 
         n_modalities=1, verify_dataset=True, epochs = 35, initial_epoch = 0, batch_size = 16, 
-        validate=False, val_images=None, val_annotations=None, val_batch_size=16, 
-        steps_per_epoch=512, validation_steps=200, do_augment=False):
+        validate=False, val_images=config['dataset_path'] + 'val_images/', val_annotations=config['dataset_path'] + 'val_segmentation/' + config['train_label'], val_batch_size=16,
+        steps_per_epoch=512, validation_steps=200, do_augment=True):
 
     if verify_dataset:
         print("Verifying train dataset")
@@ -49,10 +49,10 @@ def train_deepseg_model(model, train_images, train_annotations, input_height=224
 
     if validate:
         val_gen = image_segmentation_generator(val_images, val_annotations,  val_batch_size, classes, input_height, input_width, output_height, output_width, do_augment=False, shuffle=False)
-        results = model.fit_generator(train_gen, steps_per_epoch, validation_data=val_gen, validation_steps=validation_steps,
+        results = model.fit(train_gen, steps_per_epoch, validation_data=val_gen, validation_steps=validation_steps,
                                       epochs=epochs, initial_epoch=initial_epoch, callbacks=[csv_logger, model_checkpoint, csv_logger, tensor_board])#, model_earlystopping])
     else:
-        results = model.fit_generator(train_gen, steps_per_epoch, epochs=epochs, initial_epoch=initial_epoch, callbacks=[model_checkpoint, csv_logger, tensor_board]) #, model_earlystopping])
+        results = model.fit(train_gen, steps_per_epoch, epochs=epochs, initial_epoch=initial_epoch, callbacks=[model_checkpoint, csv_logger, tensor_board]) #, model_earlystopping])
 
     return results
 

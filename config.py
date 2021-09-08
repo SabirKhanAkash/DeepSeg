@@ -49,7 +49,7 @@ config['dataset_path'] = 'DATASET/dataset_brats19/' # path to the dataset contai
 #####################################################################
 
 # model configuration
-config['encoder_name'] = 'DenseNet121' # name of the encoder: UNet, UNet-Mod, VGG16, ResNet50, MobileNet, MobileNetV2, Xception, NASNetMobile, DenseNet121
+config['encoder_name'] = 'NASNetMobile' # name of the encoder: UNet, UNet-Mod, VGG16, ResNet50, MobileNet, MobileNetV2, Xception, NASNetMobile, DenseNet121
 config['decoder_name'] = 'UNet-Mod' # name of the decoder: UNet, UNet-Mod
 config['project_name'] = config['encoder_name'] + '_' + config['decoder_name']
 
@@ -122,17 +122,17 @@ config['elastic'] = (720, 24) # alpha=720, sigma=24
 config['random_order'] = True # apply augmenters in random order
 
 # prediction and evaluation
-config['sample_output'] = False # show a sample output from brats_19
-config['sample_path'] = 'BraTS19_TCIA10_408_1-66'
+config['sample_output'] = True # show a sample output from brats_19
+config['sample_path'] = 'BraTS19_TCIA10_408_1-67'
 config['pred_path'] = 'preds/' + config['project_name'] + '/'
 config['evaluate_path'] = 'evaluations/' # + config['project_name'] + '/'
-config['evaluate_val'] = False # evaluate the entire validation set
-config['evaluate_val_nifti'] = True # evaluate the validation set as nifti images
+config['evaluate_val'] = True # evaluate the entire validation set
+config['evaluate_val_nifti'] = False # evaluate the validation set as nifti images
 config['evaluate_keras'] = False # evaluate using keras evaluate_generator()
 config['save_csv'] = False # save the evaluations as .csv file
 config['save_plot'] = False # save the evaluations plot
-config['predict_val'] = False # predict the entire validation set
-config['predict_val_nifti'] = True # save the predicted validation set as nifti images
+config['predict_val'] = True # predict the entire validation set
+config['predict_val_nifti'] = False # save the predicted validation set as nifti images
 config['pred_path_nifti_240'] = "preds/" +  config['project_name'] + '_nifti_240/'
 config['val_cases_file'] = "data/valid_cases_unique.txt" # path to the validation cases file
 config['valid_cases_dir'] = "valid_cases/"

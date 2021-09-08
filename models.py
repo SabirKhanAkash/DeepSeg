@@ -75,10 +75,17 @@ def get_deepseg_model(encoder_name, decoder_name, n_classes, input_height, input
         optimizer=config['optimizer_name'],
         metrics=[dice_argmax, specificity, sensitivity])
 
+    # print(model.summary())
+
+    # print(model.input_shape)
+    # print(model.output_shape)
+
     # Load the saved model
     if load_model:
         if config['load_model_path'] is None:
+            # print('GG here')
             model.load_weights(glob.glob(os.path.join(config['weight_dir']+config['project_name'],'*'+config['model_num']+'*'))[0])
         else:
+            # print('GG there')
             model.load_weights(config['load_model_path'])
     return model

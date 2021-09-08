@@ -25,10 +25,11 @@ from data import *
 from utils import *
 from models import *
 from predict import *
-from keras import backend as K
+from tensorflow.python.keras import backend as K
 import pandas as pd
 import matplotlib
-matplotlib.use('agg')
+import matplotlib.image as mpimg
+# matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 def get_truth_images(truth_dir='truth/', truth_shape=(3445,224,224)):
@@ -79,7 +80,7 @@ def save_evaluation_csv(pred_path='preds/', truth_path='truth/', evaluate_path='
         plt.savefig(evaluate_path+"/brats19_"+config['project_name']+"_scores_boxplot.png")
         plt.close()
 
-def main(evaluate_val=True, evaluate_val_nifti=True, evaluate_keras=False, save_csv=False, sample_output=False):
+def main(evaluate_val=True, evaluate_val_nifti=False, evaluate_keras=False, save_csv=False, sample_output=True):
     # create the DeepSeg model
     unet_2d_model = get_deepseg_model(
             encoder_name=config['encoder_name'], 
@@ -162,7 +163,7 @@ def main(evaluate_val=True, evaluate_val_nifti=True, evaluate_keras=False, save_
     if evaluate_keras:
         val_generator = image_segmentation_generator(config['val_images'], config['val_annotations'],  config['val_batch_size'], config['classes'], config['input_height'], config['input_width'], config['output_height'], config['output_width'], do_augment=False, shuffle=False)
 
-        results = unet_2d_model.evaluate_generator(val_generator, steps=config['validation_steps'], verbose=1, max_queue_size=1, workers=1, use_multiprocessing=False) 
+        results = unet_2d_model.evaluate(val_generator, steps=config['validation_steps'], verbose=1, max_queue_size=1, workers=1, use_multiprocessing=False)
         print(results)
 
     # save data to .csv file
@@ -176,37 +177,44 @@ def main(evaluate_val=True, evaluate_val_nifti=True, evaluate_keras=False, save_
         sample_path = config['sample_path']
         print("Evaluating BraTS 19 sample:", sample_path)
         orig_path = config['val_images']+config['train_modality'][0]+sample_path +'.png' # T1 image
-        truth_path = config['val_annotations']+sample_path+'.png'
+        truth_path = config['val_annotations']+'/'+sample_path+'.png'
+        print(orig_path)
+        print(truth_path)
         pred_path = "out_test_file/"+sample_path+"_pred.png"
-        pred_img = predict(unet_2d_model, inp = orig_path, out_fname="out_test_file/"+sample_path+"_pred.png")
+        pred_img = predict(unet_2d_model, inp = orig_path, out_fname=pred_path)
 
         # load as grayscale images
-        orig_img = imread(orig_path, 0)
-        truth_img = imread(truth_path, 0)
-        truth_img = resize(truth_img, (config['input_height'], config['input_width']), interpolation = INTER_NEAREST)
-        pred_img = imread(pred_path, 0)
+        orig_img = mpimg.imread(orig_path)
+        truth_img = mpimg.imread(truth_path)
+        # truth_img = cv2.resize(truth_img, (config['input_height'], config['input_width']), interpolation = INTER_NEAREST)
+        # pred_img = mpimg.imread(pred_path)
+        # plt.imshow(truth_img)
+        # cv2.imshow(truth_img)
+
 
         unique, counts = np.unique(truth_img, return_counts=True)
         print('Truth', dict(zip(unique, counts)))
         unique, counts = np.unique(pred_img, return_counts=True)
         print('Preds', dict(zip(unique, counts)))
 
-        truth_whole = get_whole_tumor_mask(truth_img)
+        # truth_whole = get_whole_tumor_mask(truth_img)
+        # pred_whole = get_whole_tumor_mask(pred_img)
+
         #truth_core = get_tumor_core_mask(truth_img)
         #truth_enhancing = get_enhancing_tumor_mask(truth_img)
-        pred_whole = get_whole_tumor_mask(pred_img)
+
         #pred_core = get_tumor_core_mask(pred_img)
         #pred_enhancing = get_enhancing_tumor_mask(pred_img)
 
         evaluation_functions = (get_dice_coefficient, get_hausdorff_distance, get_sensitivity, get_specificity)
         print("Whole Dice, Hausdorff distance, Sensitivity, Specificity")
-        print([func(truth_whole, pred_whole)for func in evaluation_functions])
+        # print([func(truth_whole, pred_whole)for func in evaluation_functions])
 
         f = plt.figure()
         # (nrows, ncols, index)
         f.add_subplot(1,3, 1)
         plt.title('Original image')
-        plt.imshow(orig_img, cmap='gray')
+        plt.imshow(orig_img)
         f.add_subplot(1,3, 2)
         plt.title('Predicted image')
         plt.imshow(pred_img)

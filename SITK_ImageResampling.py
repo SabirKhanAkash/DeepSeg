@@ -30,7 +30,7 @@ class MyDataset:
 paths = []
 for i in range(num_images):
     image = sitk.GetImageFromArray(np.random.rand(10, 20, 30))
-    path = f'/tmp/image_{i}.nii'
+    path = f'/tmp/image_{i}.nii.gz'
     sitk.WriteImage(image, path)
     paths.append(path)
 
