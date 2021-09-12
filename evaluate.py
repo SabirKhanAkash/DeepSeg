@@ -214,13 +214,13 @@ def main(evaluate_val=True, evaluate_val_nifti=False, evaluate_keras=False, save
         # (nrows, ncols, index)
         f.add_subplot(1,3, 1)
         plt.title('Original image')
-        plt.imshow(orig_img)
+        plt.imshow(orig_img, cmap='Reds')
         f.add_subplot(1,3, 2)
         plt.title('Predicted image')
-        plt.imshow(pred_img)
+        plt.imshow(pred_img, cmap='Reds')
         f.add_subplot(1,3, 3)
         plt.title('Ground truth image')
-        plt.imshow(truth_img)
+        plt.imshow(truth_img, cmap='Reds')
         plt.show(block=True)
 
 if __name__ == "__main__":

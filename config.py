@@ -40,21 +40,21 @@ config = dict()
 
 ####### These variables should be modified to your local path #######
 # dataset paths
-config['brats_path'] = 'DATASET/MICCAI_BraTS_2019_Data_Validation/' # path to the original BraTS 2019
-config['preprocessed_brats'] = 'DATASET/BraTS19_train_preprocessed/' # path to the output preprocessed BraTS 2019 (after preprocess.py)
+config['brats_path'] = 'DATASET/MICCAI_BraTS_2018_Data_Training/' # path to the original BraTS 2019
+config['preprocessed_brats'] = 'G:/Shared drives/Shared_Drive_1/DATASET/BraTS20_train_preprocessed/' # path to the output preprocessed BraTS 2019 (after preprocess.py)
 config['preprocessed_brats_val'] = 'DATASET/BraTS19_train_preprocessed_val/'
-config['preprocessed_brats_imgs'] = 'DATASET/BraTS19_train_images/' # path to the output preprocessed 2D images (after preprocess_2d_images.py)
+config['preprocessed_brats_imgs'] = 'G:/Shared drives/Shared_Drive_1/DATASET/BraTS20_train_images/' # path to the output preprocessed 2D images (after preprocess_2d_images.py)
 config['preprocessed_brats_val_imgs'] = 'DATASET/BraTS19_train_images_val/'
 config['dataset_path'] = 'DATASET/dataset_brats19/' # path to the dataset containing 2d images (train_images, train_segmentation, ... etc)
 #####################################################################
 
 # model configuration
-config['encoder_name'] = 'NASNetMobile' # name of the encoder: UNet, UNet-Mod, VGG16, ResNet50, MobileNet, MobileNetV2, Xception, NASNetMobile, DenseNet121
+config['encoder_name'] = 'VGG16' # name of the encoder: UNet, UNet-Mod, VGG16, ResNet50, MobileNet, MobileNetV2, Xception, NASNetMobile, DenseNet121
 config['decoder_name'] = 'UNet-Mod' # name of the decoder: UNet, UNet-Mod
 config['project_name'] = config['encoder_name'] + '_' + config['decoder_name']
 
 config['all_modalities'] = ["image_FLAIR/", "image_t1/", "image_t1ce/", "image_t2/"]
-config['train_modality'] = ["image_FLAIR/"]
+config['train_modality'] = 'image_FLAIR/'
 config['n_modalities'] = len(config['train_modality'])
 config['label_type'] = '' # _complete, _core, _enhancing, _l1, _l2, _l3
 config['train_label'] = 'truth' + config['label_type']
@@ -123,10 +123,10 @@ config['random_order'] = True # apply augmenters in random order
 
 # prediction and evaluation
 config['sample_output'] = True # show a sample output from brats_19
-config['sample_path'] = 'BraTS19_TCIA10_408_1-67'
+config['sample_path'] = 'BraTS19_CBICA_BDK_1-62'
 config['pred_path'] = 'preds/' + config['project_name'] + '/'
 config['evaluate_path'] = 'evaluations/' # + config['project_name'] + '/'
-config['evaluate_val'] = True # evaluate the entire validation set
+config['evaluate_val'] = False # evaluate the entire validation set
 config['evaluate_val_nifti'] = False # evaluate the validation set as nifti images
 config['evaluate_keras'] = False # evaluate using keras evaluate_generator()
 config['save_csv'] = False # save the evaluations as .csv file

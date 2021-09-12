@@ -94,7 +94,7 @@ def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None, checkpoi
             all_prs.append(pr)
     return all_prs
 
-def main(sample_output=False, predict_val=True, predict_val_nifti=False):
+def main(sample_output=False, predict_val=False, predict_val_nifti=True):
     # create the DeepSeg model
     unet_2d_model = get_deepseg_model(
             encoder_name=config['encoder_name'], 
