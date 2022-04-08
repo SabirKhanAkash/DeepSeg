@@ -70,6 +70,7 @@ def normalize_image(in_path, out_path, bias_correction=True):
         shutil.copy(in_path, out_path)
 
 def preprocess_brats_folder(in_folder, out_folder, truth_name='seg', no_bias_correction_modalities=None):
+    print("I'm Here")
     for name in config["modalities"]:
         image_image = get_image_path(in_folder, name)
         case_ID = os.path.basename(out_folder)

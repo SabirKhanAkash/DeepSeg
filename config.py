@@ -40,16 +40,16 @@ config = dict()
 
 ####### These variables should be modified to your local path #######
 # dataset paths
-config['brats_path'] = 'DATASET/MICCAI_BraTS_2018_Data_Training/' # path to the original BraTS 2019
-config['preprocessed_brats'] = 'G:/Shared drives/Shared_Drive_1/DATASET/BraTS20_train_preprocessed/' # path to the output preprocessed BraTS 2019 (after preprocess.py)
+config['brats_path'] = 'DATASET/MICCAI_BraTS2018_TrainingData/' # path to the original BraTS 2019
+config['preprocessed_brats'] = 'DATASET/BraTS18_train_preprocessed/' # path to the output preprocessed BraTS 2019 (after preprocess.py)
 config['preprocessed_brats_val'] = 'DATASET/BraTS19_train_preprocessed_val/'
-config['preprocessed_brats_imgs'] = 'G:/Shared drives/Shared_Drive_1/DATASET/BraTS20_train_images/' # path to the output preprocessed 2D images (after preprocess_2d_images.py)
+config['preprocessed_brats_imgs'] = 'DATASET/BraTS18_train_images/' # path to the output preprocessed 2D images (after preprocess_2d_images.py)
 config['preprocessed_brats_val_imgs'] = 'DATASET/BraTS19_train_images_val/'
-config['dataset_path'] = 'DATASET/dataset_brats19/' # path to the dataset containing 2d images (train_images, train_segmentation, ... etc)
+config['dataset_path'] = 'DATASET/dataset_brats18/' # path to the dataset containing 2d images (train_images, train_segmentation, ... etc)
 #####################################################################
 
 # model configuration
-config['encoder_name'] = 'VGG16' # name of the encoder: UNet, UNet-Mod, VGG16, ResNet50, MobileNet, MobileNetV2, Xception, NASNetMobile, DenseNet121
+config['encoder_name'] = 'DenseNet121' # name of the encoder: UNet, UNet-Mod, VGG16, ResNet50, MobileNet, MobileNetV2, Xception, NASNetMobile, DenseNet121
 config['decoder_name'] = 'UNet-Mod' # name of the decoder: UNet, UNet-Mod
 config['project_name'] = config['encoder_name'] + '_' + config['decoder_name']
 
@@ -126,13 +126,13 @@ config['sample_output'] = True # show a sample output from brats_19
 config['sample_path'] = 'BraTS19_CBICA_BDK_1-62'
 config['pred_path'] = 'preds/' + config['project_name'] + '/'
 config['evaluate_path'] = 'evaluations/' # + config['project_name'] + '/'
-config['evaluate_val'] = False # evaluate the entire validation set
+config['evaluate_val'] = True # evaluate the entire validation set
 config['evaluate_val_nifti'] = False # evaluate the validation set as nifti images
-config['evaluate_keras'] = False # evaluate using keras evaluate_generator()
+config['evaluate_keras'] = True # evaluate using keras evaluate_generator()
 config['save_csv'] = False # save the evaluations as .csv file
 config['save_plot'] = False # save the evaluations plot
 config['predict_val'] = True # predict the entire validation set
-config['predict_val_nifti'] = False # save the predicted validation set as nifti images
+config['predict_val_nifti'] = True # save the predicted validation set as nifti images
 config['pred_path_nifti_240'] = "preds/" +  config['project_name'] + '_nifti_240/'
 config['val_cases_file'] = "data/valid_cases_unique.txt" # path to the validation cases file
 config['valid_cases_dir'] = "valid_cases/"
@@ -171,12 +171,21 @@ print("####################################################################\n\n"
 import tensorflow as tf
 #
 #
+# gpu_id = 0 # for multi-gpu environment
+# os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
+# gpu_config = tf.compat.v1.ConfigProto(log_device_placement=True)
+# gpu_config.gpu_options.allow_growth = True
+# K.set_session(tf.compat.v1.Session())
+# print(tf.test.gpu_device_name())
+#
+#
+# print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
+
 gpu_id = 0 # for multi-gpu environment
 os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
-gpu_config = tf.compat.v1.ConfigProto(log_device_placement=True)
+gpu_config = tf.ConfigProto(allow_soft_placement=True)
 gpu_config.gpu_options.allow_growth = True
-K.set_session(tf.compat.v1.Session())
-print(tf.test.gpu_device_name())
-
-
-print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+set_session(tf.Session(config=gpu_config))

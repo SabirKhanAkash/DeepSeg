@@ -6,3 +6,6 @@ paper_weights
 preds
 weights
 __pycache__
+venv/
+.idea/DeepSeg.iml
+.idea/DeepSeg.iml

@@ -1,9 +1,10 @@
 import os,shutil
+from tqdm import tqdm
 
-src = 'G:/Shared drives/Shared_Drive_1/DATASET/BraTS20_train_images/image_t1ce/'
-dest = 'G:/Shared drives/Shared_Drive_1/DATASET/dataset_brats20/train_images/image_t1ce/'
+src = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/DeepSeg/DATASET/BraTS18_train_images/image_t1ce/'
+dest = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/DeepSeg/DATASET/dataset_brats18/image_t1ce/'
 
-for files in (os.listdir(src)):
+for files in tqdm(os.listdir(src)):
     try:
         dir3 = src+files+'/'
         for f in os.listdir(dir3):

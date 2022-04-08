@@ -162,7 +162,7 @@ def verify_segmentation_dataset(images_path, segs_path, n_classes):
     for (im_fn, seg_fn) in tqdm(img_seg_pairs):
         img = cv2.imread(im_fn)
         seg = cv2.imread(seg_fn)
-        # assert(img.shape[0]==seg.shape[0] and img.shape[1]==seg.shape[1]), "The size of image and the annotation does not match or they are corrupt "+ im_fn + " " + seg_fn
+        assert(img.shape[0]==seg.shape[0] and img.shape[1]==seg.shape[1]), "The size of image and the annotation does not match or they are corrupt "+ im_fn + " " + seg_fn
     print("Dataset verified! ")
 
 def image_segmentation_generator(images_path, segs_path,  batch_size,  classes, input_height, input_width, output_height, output_width, do_augment=False, shuffle=True):
